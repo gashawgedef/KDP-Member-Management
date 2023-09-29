@@ -6,7 +6,7 @@ app=FastAPI()
 
 @app.get("/")
 async def index():
-    return {"Detail":"Welcome to QDA"}
+    return {"Detail":"Welcome to QDAs"}
 
 @app.post("/members")
 async def register_user(members:Members):
