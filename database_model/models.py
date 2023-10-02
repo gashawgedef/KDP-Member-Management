@@ -27,4 +27,14 @@ class ProfessionType(Base):
     id = Column(Integer, primary_key=True, index=True)
     profession_name: Mapped[str] = mapped_column()
     description: Mapped[str] = mapped_column()
- 
+
+class MemberAddress(Base):
+    __tablename__ = "members_address"    
+    id = Column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column()
+    country: Mapped[str] = mapped_column()
+    address_region: Mapped[str] = mapped_column()
+    address_zone: Mapped[str] = mapped_column()
+    address_wereda: Mapped[str] = mapped_column()
+    annual_contribution: Mapped[float] = mapped_column()
+    membership_year:Mapped[str]=mapped_column()

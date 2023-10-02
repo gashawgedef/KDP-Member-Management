@@ -21,7 +21,7 @@ def get_all_members(db:Session):
 
 def get_member_by_id(id:int,db:Session):
     member_data=db.query(models.Member).filter(models.Member.id==id)
-    if not member_data:
+    if not member_data.first():
            raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"the blog with id {id} is not available",

@@ -23,7 +23,7 @@ def show(id, db: Session = Depends(get_db)):
     return members_repository.get_member_by_id(id, db)
 
 @router.put("/{id}", status_code=status.HTTP_202_ACCEPTED)
-def update_item(id, request:schemas. Members, db: Session = Depends(get_db)):
+def update_item(id, request:schemas.Members, db: Session = Depends(get_db)):
     return members_repository.update_member(id, request, db)
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
