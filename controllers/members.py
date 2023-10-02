@@ -17,6 +17,14 @@ def get_members(db:Session=Depends(get_db)):
    return  members.get_all_members(db)
 
 
-@router.get('/{id}',status_code=status.HTTP_200_OK)
-def get_single_member(id:int,db:Session=Depends(get_db)):
-    return members.get_member_by_id(id,db)
+@router.get("/{id}", status_code=200)
+def show(id, db: Session = Depends(get_db)):
+    return members.get_member_by_id(id, db)
+
+@router.put("/{id}", status_code=status.HTTP_202_ACCEPTED)
+def update_item(id, request: Members, db: Session = Depends(get_db)):
+    return members.update_member(id, request, db)
+
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_item(id, db: Session = Depends(get_db)):
+    return members.delete_member(id, db)

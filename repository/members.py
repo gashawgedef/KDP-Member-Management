@@ -28,6 +28,38 @@ def get_member_by_id(id:int,db:Session):
         )
     return member_data
 
+def get_single_member(id:int, db:Session):
+    data = db.query(member.Member).filter(member.Member.id == id).first()
+    if not data:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"the blog with id {id} is not available",
+        )
+        # response.status_code=status.HTTP_404_NOT_FOUND
+        return {"detail": f"blog with the id  {id} is not avaialable"}
+    return data
+
+def update_member(id:int,request: Member.Members,db:Session):
+    blog = db.query(member.Member).filter(member.Member.id == id)
+    if not blog.first():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"blog with the id  {id} is not avaialable",
+        )
+    blog.update(request.dict())
+    db.commit()
+    return "Updated successfully"
 
 
 
+
+def delete_member(id, db:Session):
+    blog = db.query(member.Member).filter(member.Member.id == id)
+    if not blog.first():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"blog with the id  {id} is not avaialable",
+        )
+    blog.delete(synchronize_session=False)
+    db.commit()
+    return blog
