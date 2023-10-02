@@ -21,3 +21,11 @@ class Member(Base):
     birth_place_kebele:Mapped[str]=mapped_column()
 
     #user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+
+
+class ProfessionType(Base):
+    __tablename__ = "profession_types"
+    id = Column(Integer, primary_key=True, index=True)
+    profession_name: Mapped[str] = mapped_column()
+    description: Mapped[str] = mapped_column()
+ 
