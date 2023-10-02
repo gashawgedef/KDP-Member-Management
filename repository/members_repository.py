@@ -2,7 +2,7 @@
 from fastapi import HTTPException, Response,status
 from sqlalchemy.orm import Session
 from schema_models import schemas
-from datamodel import models
+from database_model import models
 
 def create_members(request: schemas.Members,db:Session):
     new_member=models.Member(
