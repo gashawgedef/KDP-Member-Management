@@ -1,7 +1,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
-from ..database.database_connection import Base
+from  database_connection import Base
 from sqlalchemy.orm import relationship
 
 
