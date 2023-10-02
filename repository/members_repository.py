@@ -1,11 +1,11 @@
 
 from fastapi import HTTPException, Response,status
 from sqlalchemy.orm import Session
-from schemas import Member
-from models import member
+from schema_models import schemas
+from datamodel import models
 
-def create_members(request: Member.Members,db:Session):
-    new_member=member.Member(
+def create_members(request: schemas.Members,db:Session):
+    new_member=models.Member(
         first_name=request.first_name,middle_name=request.middle_name,last_name=request.last_name,phone=request.phone,
         email=request.email,profession=request.profession,birth_date=request.birth_date,birth_place_region=request.birth_place_region,
         birth_place_zone=request.birth_place_zone,birth_place_wereda=request.birth_place_wereda,birth_place_kebele=request.birth_place_kebele
@@ -16,11 +16,11 @@ def create_members(request: Member.Members,db:Session):
     return new_member
 
 def get_all_members(db:Session):
-    members=db.query(member.Member).all()
+    members=db.query(models.Member).all()
     return members
 
 def get_member_by_id(id:int,db:Session):
-    member_data=db.query(member.Member).filter(member.Member.id==id)
+    member_data=db.query(models.Member).filter(models.Member.id==id)
     if not member_data:
            raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -29,7 +29,7 @@ def get_member_by_id(id:int,db:Session):
     return member_data
 
 def get_single_member(id:int, db:Session):
-    data = db.query(member.Member).filter(member.Member.id == id).first()
+    data = db.query(models.Member).filter(models.Member.id == id).first()
     if not data:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -39,8 +39,8 @@ def get_single_member(id:int, db:Session):
         return {"detail": f"blog with the id  {id} is not avaialable"}
     return data
 
-def update_member(id:int,request: Member.Members,db:Session):
-    blog = db.query(member.Member).filter(member.Member.id == id)
+def update_member(id:int,request: schemas.Members,db:Session):
+    blog = db.query(models.Member).filter(models.Member.id == id)
     if not blog.first():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -54,7 +54,7 @@ def update_member(id:int,request: Member.Members,db:Session):
 
 
 def delete_member(id, db:Session):
-    blog = db.query(member.Member).filter(member.Member.id == id)
+    blog = db.query(models.Member).filter(models.Member.id == id)
     if not blog.first():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
