@@ -1,6 +1,7 @@
 
 
 from pydantic import BaseModel
+
 class Members(BaseModel):
     first_name:str
     middle_name:str
@@ -13,3 +14,7 @@ class Members(BaseModel):
     birth_place_zone:str
     birth_place_wereda:str
     birth_place_kebele:str
+
+class ProfessionType(BaseModel):
+    profession_name:str
+    profession_description:str
