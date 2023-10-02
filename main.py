@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
 from schema_models import schemas
-from datamodel import models
-from controllers import members_controller
+from database_model import models
+from controllers import members_controller,profession_types_controller
 from database_connection import engine,Base
 from fastapi import FastAPI
 from  repository import members_repository
@@ -12,7 +12,7 @@ app=FastAPI()
 
 models.Base.metadata.create_all(engine)
 app.include_router(members_controller.router)
-#app.include_router(profession_type.router)
+app.include_router(profession_types_controller.router)
 
 @app.get("/")
 async def index():

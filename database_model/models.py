@@ -4,7 +4,6 @@ from sqlalchemy.orm import Mapped, mapped_column
 from  database_connection import Base
 from sqlalchemy.orm import relationship
 
-
 class Member(Base):
     __tablename__ = "members"
     id = Column(Integer, primary_key=True, index=True)
