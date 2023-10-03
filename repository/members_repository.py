@@ -58,8 +58,12 @@ def delete_member(id, db:Session):
     if not blog.first():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"blog with the id  {id} is not avaialable",
+            detail=f"blog with the id  {id} is not avaialable in the database",
         )
     blog.delete(synchronize_session=False)
     db.commit()
     return blog
+
+
+def  get_these():
+    return {"detail":"Gashaw Gedef"}
