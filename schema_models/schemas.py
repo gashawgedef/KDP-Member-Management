@@ -32,3 +32,16 @@ class MembersAddress(BaseModel):
 class DanationTypeSchema(BaseModel):
     donation_name:str
     description:str
+
+class AnouncementSchema(BaseModel):
+    title:str
+    content:str
+    posted_date:str
+
+class ProjectSchema(BaseModel):
+    project_name:str
+    description:str
+    start_date:str
+    end_date:str
+    estimated_budget:str
+    status:str
