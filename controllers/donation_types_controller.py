@@ -23,3 +23,12 @@ def update_donation_type(id, request:schemas.DanationTypeSchema, db: Session = D
     return donation_types_repository.update_single_donation(id, request, db)
 
 
+@router.get("/{id}", status_code=status.HTTP_404_NOT_FOUND)
+def get_single_donation_type(id:int,db: Session = Depends(get_db)):
+    return donation_types_repository.get_single_donation_type(id,db)
+
+
+@router.delete("/{id}", status_code=status.HTTP_404_NOT_FOUND)
+def update_profession_type(id:int, db: Session = Depends(get_db)):
+    return donation_types_repository.delete_donation_type(id,  db)
+
