@@ -1,3 +1,5 @@
+from operator import index
+from turtle import title
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -38,3 +40,26 @@ class MemberAddress(Base):
     address_wereda: Mapped[str] = mapped_column()
     annual_contribution: Mapped[float] = mapped_column()
     membership_year:Mapped[str]=mapped_column()
+
+class DonationType(Base):
+    __tablename__='donation_Types'
+    id=Column(Integer,primary_key=True,index=True)
+    donation_name:Mapped[str]=mapped_column()
+    description:Mapped[str]=mapped_column()
+
+class Announcement(Base):
+    __tablename__='announcemnents'
+    id=Column(Integer,primary_key=True,index=True)
+    title:Mapped[str]=mapped_column()
+    content:Mapped[str]=mapped_column()
+    posted_date:Mapped[str]=mapped_column()
+
+class Project(Base):
+    __tablename__='projects'
+    id=Column(Integer,primary_key=True,index=True)
+    project_name:Mapped[str]=mapped_column()
+    description:Mapped[str]=mapped_column()
+    start_date:Mapped[str]=mapped_column()
+    end_date:Mapped[str]=mapped_column()
+    estimated_budget:Mapped[str]=mapped_column()
+    status:Mapped[str]=mapped_column()

@@ -27,3 +27,8 @@ class MembersAddress(BaseModel):
     address_wereda: str
     annual_contribution: float
     membership_year:str
+
+
+class DanationTypeSchema(BaseModel):
+    donation_name:str
+    description:str
