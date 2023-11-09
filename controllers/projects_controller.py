@@ -29,7 +29,6 @@ def update_project(id, request:schemas.ProjectSchema, db: Session = Depends(get_
 def get_single_project(id:int,db: Session = Depends(get_db)):
     return projects_repository.get_single_project(id,db)
 
-
 @router.delete("/{id}", status_code=status.HTTP_404_NOT_FOUND)
 def delete_project(id:int, db: Session = Depends(get_db)):
     return projects_repository.delete_project(id,  db)
