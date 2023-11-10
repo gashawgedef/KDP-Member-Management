@@ -20,6 +20,7 @@ class Member(Base):
     birth_place_zone: Mapped[str] = mapped_column()
     birth_place_wereda: Mapped[str] = mapped_column()
     birth_place_kebele:Mapped[str]=mapped_column()
+    member_address=relationship('MemberAddress',back_populates="members")
 
     #user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
@@ -40,6 +41,8 @@ class MemberAddress(Base):
     address_wereda: Mapped[str] = mapped_column()
     annual_contribution: Mapped[float] = mapped_column()
     membership_year:Mapped[str]=mapped_column()
+    member_id: Mapped[int] = mapped_column(ForeignKey("members.id"))
+    members=relationship("Member",back_populates="member_address")
 
 class DonationType(Base):
     __tablename__='donation_Types'

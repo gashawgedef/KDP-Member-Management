@@ -12,7 +12,8 @@ def create_members_address(request: schemas.MembersAddress,db:Session):
           address_zone=request.address_zone,
           address_wereda=request.address_wereda,
           annual_contribution=request.annual_contribution,
-          membership_year=request.membership_year
+          membership_year=request.membership_year,
+           member_id=request.member_id
        
         )
     db.add(data)

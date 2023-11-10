@@ -27,6 +27,7 @@ class MembersAddress(BaseModel):
     address_wereda: str
     annual_contribution: float
     membership_year:str
+    member_id:int
 
 
 class DanationTypeSchema(BaseModel):
