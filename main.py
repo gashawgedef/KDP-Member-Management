@@ -6,10 +6,17 @@ from controllers import members_controller,profession_types_controller,members_a
 from database_connection import engine,Base
 from fastapi import FastAPI
 from  repository import members_repository
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app=FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 models.Base.metadata.create_all(engine)
 app.include_router(members_controller.router)
 app.include_router(profession_types_controller.router)
