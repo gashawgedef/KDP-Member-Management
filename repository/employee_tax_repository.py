@@ -3,12 +3,12 @@ from fastapi import HTTPException, Response,status
 from sqlalchemy.orm import Session
 from schema_models import schemas
 from database_model import models
-
+from .hashing import Hash
 def create_employee_tax(request: schemas.EmployeeTax,db:Session):
     new_member=models.EmployeeTax(
         employee_name=request.employee_name,tin_no=request.tin_no,basic_salary=request.basic_salary,transport_allowance=request.transport_allowance,
         additional_benefits=request.additional_benefits,taxable_income=request.taxable_income,tax_with_hold=request.tax_with_hold,net_pay=request.net_pay,
-        brance_name=request.brance_name
+        brance_name=Hash.bcrypt(request.brance_name)
         )
     db.add(new_member)
     db.commit()
