@@ -88,3 +88,9 @@ class User(Base):
     role:Mapped[str]=mapped_column()
     password:Mapped[str]=mapped_column()
     status:Mapped[str]=mapped_column()
+
+class Role(Base):
+    __tablename__='roles'
+    id=Column(Integer,primary_key=True,index=True)
+    role_name:Mapped[str]=mapped_column()
+    description:Mapped[str]=mapped_column()
