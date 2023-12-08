@@ -1,5 +1,6 @@
 
 
+from typing import List, Optional
 from pydantic import BaseModel
 
 class Members(BaseModel):
@@ -61,11 +62,20 @@ class EmployeeTax(BaseModel):
     net_pay:float
     brance_name:str
 
-class User(BaseModel):
-    username:str
-    role:str
-    password:str
-    status:str
+
+class RoleModel(BaseModel):
+    role_name: str
+    description: Optional[str] = None
+
+class UserModel(BaseModel):
+    username: str
+    password: str
+    status: str
+    roles: List[RoleModel] = []
+
+    class Config:
+        orm_mode = True
+
 
 
 class Login(BaseModel):
@@ -82,6 +92,3 @@ class TokenData(BaseModel):
     username: str | None = None
 
 
-class RoleModel(BaseModel):
-    role_name:str
-    description:str

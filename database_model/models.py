@@ -1,6 +1,7 @@
+from msilib import Table
 from operator import index
 from turtle import title
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, ForeignKey
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, ForeignKey,Table
 from sqlalchemy.orm import Mapped, mapped_column
 
 from  database_connection import Base
@@ -82,15 +83,24 @@ class EmployeeTax(Base):
 
 
 class User(Base):
-    __tablename__='users'
-    id=Column(Integer,primary_key=True,index=True)
-    username:Mapped[str]=mapped_column()
-    role:Mapped[str]=mapped_column()
-    password:Mapped[str]=mapped_column()
-    status:Mapped[str]=mapped_column()
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String)
+    password = Column(String)
+    status = Column(String)
+    assigned_roles = relationship("Role", secondary="user_roles", backref="users")
 
 class Role(Base):
-    __tablename__='roles'
-    id=Column(Integer,primary_key=True,index=True)
-    role_name:Mapped[str]=mapped_column()
-    description:Mapped[str]=mapped_column()
+    __tablename__ = 'roles'
+    id = Column(Integer, primary_key=True, index=True)
+    role_name = Column(String)
+    description = Column(String)
+    assigned_users = relationship("User", secondary="user_roles", backref="roles_assigned")
+
+user_roles = Table(
+    "user_roles",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("users.id"), primary_key=True),
+    Column("role_id", Integer, ForeignKey("roles.id"), primary_key=True),
+    extend_existing=True
+)

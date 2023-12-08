@@ -4,18 +4,34 @@ from sqlalchemy.orm import Session
 from schema_models import schemas
 from database_model import models
 from .hashing import Hash
-def create_users(request: schemas.User,db:Session):
-    new_user=models.User(
-        username=request.username,role=request.role,password=Hash.bcrypt(request.password),status=request.status
-        )
+def create_users(request: schemas.UserModel, db: Session):
+    new_user = models.User(
+        username=request.username,
+        password=Hash.bcrypt(request.password),
+        status=request.status
+    )
+    
+    for role_data in request.roles:
+        role = db.query(models.Role).filter(models.Role.role_name == role_data.role_name).first()
+        if role:
+            new_user.assigned_roles.append(role)
+    
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return new_user
-
 def get_all_users(db:Session):
-    users=db.query(models.User).all()
-    return users
+    users = db.query(models.User).all()
+    user_models = []
+    for user in users:
+        user_model = schemas.UserModel(
+            username=user.username,
+            password=user.password,
+            status=user.status,
+            roles=[schemas.RoleModel(role_name=role.role_name, description=role.description) for role in user.assigned_roles]
+        )
+        user_models.append(user_model)
+    return user_models
 
 def get_user_by_id(id:int,db:Session):
     member_data=db.query(models.User).filter(models.User.id==id)
@@ -36,7 +52,7 @@ def get_single_employee_tax(id:int, db:Session):
     
     return data
 
-def update_user(id:int,request: schemas.User,db:Session):
+def update_user(id:int,request: schemas.UserModel,db:Session):
     user = db.query(models.User).filter(models.User.id == id)
     if not user.first():
         raise HTTPException(

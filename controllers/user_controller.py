@@ -9,7 +9,7 @@ from repository import user_repository
 router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create(request:schemas.User, db: Session = Depends(get_db)):
+def create(request:schemas.UserModel, db: Session = Depends(get_db)):
     return user_repository.create_users(request, db)
 
 
@@ -23,7 +23,7 @@ def show(id, db: Session = Depends(get_db)):
     return user_repository.get_user_by_id(id, db)
 
 @router.put("/{id}", status_code=status.HTTP_202_ACCEPTED)
-def update_item(id, request:schemas.Members, db: Session = Depends(get_db)):
+def update_item(id, request:schemas.UserModel, db: Session = Depends(get_db)):
     return user_repository.update_user(id, request, db)
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
