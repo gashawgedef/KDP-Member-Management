@@ -60,3 +60,14 @@ class EmployeeTax(BaseModel):
     tax_with_hold:str
     net_pay:float
     brance_name:str
+
+class User(BaseModel):
+    username:str
+    role:str
+    password:str
+    status:str
+
+
+class Login(BaseModel):
+    username:str
+    password:str

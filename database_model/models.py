@@ -79,3 +79,12 @@ class EmployeeTax(Base):
     tax_with_hold:Mapped[str]=mapped_column()
     net_pay:Mapped[float]=mapped_column()
     brance_name:Mapped[str]=mapped_column()
+
+
+class User(Base):
+    __tablename__='users'
+    id=Column(Integer,primary_key=True,index=True)
+    username:Mapped[str]=mapped_column()
+    role:Mapped[str]=mapped_column()
+    password:Mapped[str]=mapped_column()
+    status:Mapped[str]=mapped_column()
