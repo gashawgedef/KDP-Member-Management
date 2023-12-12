@@ -81,6 +81,15 @@ class EmployeeTax(Base):
     net_pay:Mapped[float]=mapped_column()
     brance_name:Mapped[str]=mapped_column()
 
+class MembershipPlan(Base):
+    __tablename__ = 'membership_plan'
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    price = Column(String)
+    duration = Column(String)
+  
+
+
 
 class User(Base):
     __tablename__ = 'users'

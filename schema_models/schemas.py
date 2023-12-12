@@ -91,4 +91,8 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: str | None = None
 
+class MembershipPlanModel(BaseModel):
+    name :str
+    price :str
+    duration :str
 
