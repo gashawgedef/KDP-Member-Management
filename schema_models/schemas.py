@@ -49,18 +49,6 @@ class ProjectSchema(BaseModel):
     status:str
 
 
-    
-class EmployeeTax(BaseModel):
-    
-    employee_name:str
-    tin_no:int
-    basic_salary:float
-    transport_allowance:float
-    additional_benefits:str
-    taxable_income:float
-    tax_with_hold:str
-    net_pay:float
-    brance_name:str
 
 
 class RoleModel(BaseModel):
