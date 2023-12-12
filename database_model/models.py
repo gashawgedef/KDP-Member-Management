@@ -1,3 +1,4 @@
+from datetime import date
 from msilib import Table
 from operator import index
 from turtle import title
@@ -13,6 +14,7 @@ class Member(Base):
     first_name: Mapped[str] = mapped_column()
     middle_name: Mapped[str] = mapped_column()
     last_name: Mapped[str] = mapped_column()
+    gender: Mapped[str] = mapped_column()
     phone: Mapped[str] = mapped_column()
     email: Mapped[str] = mapped_column()
     profession: Mapped[str] = mapped_column()
@@ -21,7 +23,15 @@ class Member(Base):
     birth_place_zone: Mapped[str] = mapped_column()
     birth_place_wereda: Mapped[str] = mapped_column()
     birth_place_kebele:Mapped[str]=mapped_column()
-    member_address=relationship('MemberAddress',back_populates="members")
+    country: Mapped[str] = mapped_column()
+    address_region: Mapped[str] = mapped_column()
+    address_zone: Mapped[str] = mapped_column()
+    address_wereda: Mapped[str] = mapped_column()
+    payment_status: Mapped[str]=mapped_column()  
+    member_status : Mapped[str]=mapped_column()
+    membership_year: Mapped[date] = mapped_column()
+    is_staff: Mapped[bool]=mapped_column()
+
 
     #user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
