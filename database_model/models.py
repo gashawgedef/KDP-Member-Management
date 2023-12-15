@@ -17,12 +17,12 @@ class Member(Base):
     gender: Mapped[str] = mapped_column()
     phone: Mapped[str] = mapped_column()
     email: Mapped[str] = mapped_column()
-    profession: Mapped[str] = mapped_column()
     birth_date: Mapped[str] = mapped_column()
     birth_place_region: Mapped[str] = mapped_column()
     birth_place_zone: Mapped[str] = mapped_column()
     birth_place_wereda: Mapped[str] = mapped_column()
     birth_place_kebele:Mapped[str]=mapped_column()
+    work_place: Mapped[str] = mapped_column()
     country: Mapped[str] = mapped_column()
     address_region: Mapped[str] = mapped_column()
     address_zone: Mapped[str] = mapped_column()
@@ -31,8 +31,17 @@ class Member(Base):
     member_status : Mapped[str]=mapped_column()
     membership_year: Mapped[date] = mapped_column()
     is_staff: Mapped[bool]=mapped_column()
+    educational_background = relationship("EducationalBackground", back_populates="member")
 
-
+class EducationalBackground(Base):
+    __tablename__ = "educational_backgrounds"
+    id = Column(Integer, primary_key=True)
+    member_id = Column(Integer, ForeignKey("members.id"))
+    institution = Column(String)
+    degree = Column(String)
+    field_of_study = Column(String)
+    year_completed = Column(Integer)
+    member = relationship("Member", back_populates="educational_background")
     #user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
 
@@ -76,18 +85,7 @@ user_roles = Table(
     Column("role_id", Integer, ForeignKey("roles.id"), primary_key=True),
     extend_existing=True
 )
-class MemberAddress(Base):
-    __tablename__ = "members_address"    
-    id = Column(Integer, primary_key=True, index=True)
-    name: Mapped[str] = mapped_column()
-    country: Mapped[str] = mapped_column()
-    address_region: Mapped[str] = mapped_column()
-    address_zone: Mapped[str] = mapped_column()
-    address_wereda: Mapped[str] = mapped_column()
-    annual_contribution: Mapped[float] = mapped_column()
-    membership_year:Mapped[str]=mapped_column()
-    member_id: Mapped[int] = mapped_column(ForeignKey("members.id"))
-    members=relationship("Member",back_populates="member_address")
+
 
 class DonationType(Base):
     __tablename__='donation_Types'

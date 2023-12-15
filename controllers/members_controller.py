@@ -12,14 +12,14 @@ router = APIRouter(prefix="/members", tags=["members"])
 def create(request:schemas.Members, db: Session = Depends(get_db),current_user:schemas.UserModel=Depends(oauth2.get_current_user)):
     return members_repository.create_members(request, db)
 
-
+#,current_user:schemas.UserModel=Depends(oauth2.get_current_user)
 @router.get('/')
-def get_members(db:Session=Depends(get_db),current_user:schemas.UserModel=Depends(oauth2.get_current_user)):
+def get_members(db:Session=Depends(get_db)):
    return  members_repository.get_all_members(db)
 
 
 @router.get("/{id}", status_code=200)
-def show(id, db: Session = Depends(get_db),current_user:schemas.UserModel=Depends(oauth2.get_current_user)):
+def show(id, db: Session = Depends(get_db)):
     return members_repository.get_member_by_id(id, db)
 
 @router.put("/{id}", status_code=status.HTTP_202_ACCEPTED)

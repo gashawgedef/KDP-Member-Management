@@ -4,11 +4,29 @@ from sqlalchemy.orm import Session
 from schema_models import schemas
 from database_model import models
 
+
 def create_members(request: schemas.Members,db:Session):
     new_member=models.Member(
-        first_name=request.first_name,middle_name=request.middle_name,last_name=request.last_name,phone=request.phone,
-        email=request.email,profession=request.profession,birth_date=request.birth_date,birth_place_region=request.birth_place_region,
-        birth_place_zone=request.birth_place_zone,birth_place_wereda=request.birth_place_wereda,birth_place_kebele=request.birth_place_kebele
+        first_name=request.first_name,
+        middle_name=request.middle_name,
+        last_name=request.last_name,
+        gender=request.gender,
+        phone=request.phone,
+        email=request.email,
+        birth_date=request.birth_date,
+        birth_place_region=request.birth_place_region,
+        birth_place_zone=request.birth_place_zone,
+        birth_place_wereda=request.birth_place_wereda,
+        birth_place_kebele=request.birth_place_kebele,
+        work_place=request.work_place,
+        country=request.country,
+        address_region=request.address_region,
+        address_zone=request.address_zone,
+        address_wereda=request.address_wereda,
+        payment_status=request.payment_status,
+        member_status=request.member_status,
+        membership_year=request.membership_year,
+        is_staff=request.is_staff
         )
     db.add(new_member)
     db.commit()

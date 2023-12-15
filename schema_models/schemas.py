@@ -1,21 +1,31 @@
 
 
+from datetime import date
 from typing import List, Optional
 from pydantic import BaseModel
 
 class Members(BaseModel):
-    first_name:str
-    middle_name:str
-    last_name:str
-    phone:str
-    email:str
-    profession:str
-    birth_date:str
+    first_name: str
+    middle_name: str
+    last_name: str
+    gender: str
+    phone: str
+    email: str
+    birth_date: str
     birth_place_region:str
-    birth_place_zone:str
+    birth_place_zone: str
     birth_place_wereda:str
     birth_place_kebele:str
-
+    work_place: str
+    country: str
+    address_region: str
+    address_zone: str
+    address_wereda: str
+    payment_status: str  
+    member_status : str
+    membership_year: date
+    is_staff: bool
+    
 class ProfessionType(BaseModel):
     profession_name:str
     profession_description:str
