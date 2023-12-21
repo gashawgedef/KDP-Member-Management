@@ -94,3 +94,15 @@ class MembershipPlanModel(BaseModel):
     price :str
     duration :str
 
+class RecieptIssuerModel(BaseModel):
+    first_name: str
+    middle_name: str
+    last_name: str
+    gender: str
+    phone: str
+    place_region: str
+    place_zone: str
+    place_wereda: str
+    place_kebele: str
+
+

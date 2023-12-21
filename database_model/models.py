@@ -111,3 +111,31 @@ class Project(Base):
     status:Mapped[str]=mapped_column()
 
 
+class RecieptIssuer(Base):
+    __tablename__='receipts_issuer'
+    id=Column(Integer,primary_key=True,index=True)
+    first_name: Mapped[str] = mapped_column()
+    middle_name: Mapped[str] = mapped_column()
+    last_name: Mapped[str] = mapped_column()
+    gender: Mapped[str] = mapped_column()
+    phone: Mapped[str] = mapped_column()
+    place_region: Mapped[str] = mapped_column()
+    place_zone: Mapped[str] = mapped_column()
+    place_wereda: Mapped[str] = mapped_column()
+    place_kebele: Mapped[str] = mapped_column()
+    receipt_items = relationship('ReceiptItems', back_populates='receipt_issuer')
+
+class RecieptItems(Base):
+    __tablename__='receipt_items'
+    id=Column(Integer,primary_key=True,index=True)
+    receipt_issuer_id = Column(Integer, ForeignKey('receipts_issuer.id'))
+    identifier: Mapped[str] = mapped_column()
+    from_number: Mapped[str] = mapped_column()
+    to_number: Mapped[str] = mapped_column()
+    date_taken: Mapped[date] = mapped_column()
+    return_date: Mapped[date] = mapped_column(default=None)
+    amount_birr: Mapped[float] = mapped_column(default=0.0)
+    receipt_issuer = relationship('ReceiptIssuer', back_populates='receipt_items')
+   
+
+
