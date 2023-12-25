@@ -14,12 +14,12 @@ def create(request:schemas.RecieptItemsModel, db: Session = Depends(get_db)):
 
 #,current_user:schemas.UserModel=Depends(oauth2.get_current_user)
 @router.get('/')
-def get_members(db:Session=Depends(get_db)):
+def get_receipt_items(db:Session=Depends(get_db)):
    return  receipt_items_repository.get_all_reciept_items(db)
 
 
 @router.get("/{id}", status_code=200)
-def show(id, db: Session = Depends(get_db)):
+def show_single_receipt_item(id, db: Session = Depends(get_db)):
     return receipt_items_repository.get_single_reciept_item(id, db)
 
 @router.put("/{id}", status_code=status.HTTP_202_ACCEPTED)
