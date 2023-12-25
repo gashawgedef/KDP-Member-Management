@@ -123,7 +123,7 @@ class RecieptIssuer(Base):
     place_zone: Mapped[str] = mapped_column()
     place_wereda: Mapped[str] = mapped_column()
     place_kebele: Mapped[str] = mapped_column()
-    receipt_items = relationship('ReceiptItems', back_populates='receipt_issuer')
+    receipt_items = relationship('RecieptItems', back_populates='receipt_issuer')
 
 class RecieptItems(Base):
     __tablename__='receipt_items'
@@ -135,7 +135,7 @@ class RecieptItems(Base):
     date_taken: Mapped[date] = mapped_column()
     return_date: Mapped[date] = mapped_column(default=None)
     amount_birr: Mapped[float] = mapped_column(default=0.0)
-    receipt_issuer = relationship('ReceiptIssuer', back_populates='receipt_items')
+    receipt_issuer = relationship('RecieptIssuer', back_populates='receipt_items')
    
 
 

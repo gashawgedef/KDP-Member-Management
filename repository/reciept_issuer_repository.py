@@ -5,7 +5,7 @@ from schema_models import schemas
 from database_model import models
 
 
-def create_reciept_issuers(request: schemas.RecieptIssuerModel,db:Session):
+def create_reciept_issuers(request: schemas.RecieptIssuerCreateModel,db:Session):
     new_reciept_issuer=models.RecieptIssuer(
         first_name=request.first_name,
         middle_name=request.middle_name,
@@ -26,14 +26,14 @@ def get_all_reciept_issuers(db:Session):
     reciept_issuers=db.query(models.RecieptIssuer).all()
     return reciept_issuers
 
-def get_reciept_issuers_by_id(id:int,db:Session):
-    reciept_issuer=db.query(models.RecieptIssuer).filter(models.RecieptIssuer.id==id)
-    if not reciept_issuer.first():
-           raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"the blog with id {id} is not available",
-        )
-    return reciept_issuer
+# def get_reciept_issuers_by_id(id:int,db:Session):
+#     reciept_issuer=db.query(models.RecieptIssuer).filter(models.RecieptIssuer.id==id)
+#     if not reciept_issuer.first():
+#            raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail=f"the blog with id {id} is not available",
+#         )
+#     return reciept_issuer
 
 def get_single_reciept_issuers(id:int, db:Session):
     reciept_issuer = db.query(models.RecieptIssuer).filter(models.RecieptIssuer.id == id).first()

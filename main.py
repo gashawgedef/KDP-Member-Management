@@ -3,7 +3,7 @@ from fastapi import FastAPI
 
 from schema_models import schemas
 from database_model import models
-from controllers import members_controller,reciepts_issuer_controller,membershi_plan_controller,profession_types_controller,role_controller,members_addresses_controller,donation_types_controller,announcements_controller,projects_controller,user_controller,authentication
+from controllers import members_controller,receipt_items_controller,reciepts_issuer_controller,membershi_plan_controller,profession_types_controller,role_controller,members_addresses_controller,donation_types_controller,announcements_controller,projects_controller,user_controller,authentication
 from database_connection import engine,Base
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,6 +29,8 @@ app.include_router(authentication.router)
 app.include_router(role_controller.router)
 app.include_router(membershi_plan_controller.router)
 app.include_router(reciepts_issuer_controller.router)
+app.include_router(receipt_items_controller.router)
+@app.get("/")
 @app.get("/")
 async def index():
     return {"Detail":"Welcome to QDAs"}

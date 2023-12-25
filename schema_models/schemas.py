@@ -70,7 +70,6 @@ class UserModel(BaseModel):
     password: str
     status: str
     roles: List[RoleModel] = []
-
     class Config:
         orm_mode = True
 
@@ -94,7 +93,19 @@ class MembershipPlanModel(BaseModel):
     price :str
     duration :str
 
-class RecieptIssuerModel(BaseModel):
+
+class RecieptItemsModel(BaseModel):
+    receipt_issuer_id: int
+    identifier: str
+    from_number: str
+    to_number: str
+    date_taken: date
+    return_date: Optional[date] = None
+    amount_birr: float
+    class Config:
+        orm_mode = True
+
+class RecieptIssuerCreateModel(BaseModel):
     first_name: str
     middle_name: str
     last_name: str
@@ -106,3 +117,9 @@ class RecieptIssuerModel(BaseModel):
     place_kebele: str
 
 
+class RecieptIssuerModel(RecieptIssuerCreateModel):
+    id: int
+    receipt_items: List[RecieptItemsModel] = []
+
+    class Config:
+        orm_mode = True
