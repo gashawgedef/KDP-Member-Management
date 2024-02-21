@@ -68,7 +68,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String)
     password = Column(String)
-    status = Column(String)
+    status = Column(Boolean)
     assigned_roles = relationship("Role", secondary="user_roles", backref="users")
 
 class Role(Base):

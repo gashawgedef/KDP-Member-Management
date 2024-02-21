@@ -68,7 +68,7 @@ class RoleModel(BaseModel):
 class UserModel(BaseModel):
     username: str
     password: str
-    status: str
+    status: bool
     roles: List[RoleModel] = []
     class Config:
         orm_mode = True

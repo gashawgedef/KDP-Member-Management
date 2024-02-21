@@ -12,6 +12,8 @@ router = APIRouter( tags=["Authentication"])
 @router.post("/login")
 def Login(request:OAuth2PasswordRequestForm=Depends(),db:Session=Depends(get_db)):
     user=db.query(models.User).filter(models.User.username==request.username).first()
+    if user:
+        print(user)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -23,5 +25,6 @@ def Login(request:OAuth2PasswordRequestForm=Depends(),db:Session=Depends(get_db)
             detail=f"Invalid Credintials",
         )
   
-    access_token = token.create_access_token( data={"sub": user.username})
-    return {"access_token": access_token, "token_type": "bearer"}
+    roles = [role.role_name for role in user.assigned_roles]  # Assuming 'role_name' is the attribute you want to include
+    access_token = token.create_access_token(data={"sub": user.username, "id": user.id, "roles": roles})
+    return {"access_token": access_token, "token_type": "Bearer"}
