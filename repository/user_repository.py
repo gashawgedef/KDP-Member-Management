@@ -1,9 +1,10 @@
 
-from fastapi import HTTPException, Response,status
+from fastapi import Depends, HTTPException, Response,status
 from sqlalchemy.orm import Session
 from schema_models import schemas
 from database_model import models
 from .hashing import Hash
+from . import token
 def create_users(request: schemas.UserModel, db: Session):
     new_user = models.User(
         username=request.username,
@@ -78,5 +79,13 @@ def delete_user(id, db:Session):
     return user
 
 
-def  get_these():
-    return {"detail":"Gashaw Gedef"}
+async def get_current_user(token_data: str = Depends(token.verify_token)):
+    return token_data
+
+async def get_current_active_user(current_user: schemas.TokenData = Depends(get_current_user)):
+    if not current_user.status:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Inactive user",
+        )
+    return current_user

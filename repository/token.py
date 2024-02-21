@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from msilib import schema
 import token
 from typing import Annotated
+from fastapi import Depends
 from jose import JWTError, jwt
 from schema_models import schemas
 
@@ -30,4 +31,4 @@ def verify_token(data:str,credentials_exception):
         token_data = schemas.TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    
+

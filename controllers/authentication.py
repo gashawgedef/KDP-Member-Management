@@ -26,5 +26,5 @@ def Login(request:OAuth2PasswordRequestForm=Depends(),db:Session=Depends(get_db)
         )
   
     roles = [role.role_name for role in user.assigned_roles]  # Assuming 'role_name' is the attribute you want to include
-    access_token = token.create_access_token(data={"sub": user.username, "id": user.id, "roles": roles})
+    access_token = token.create_access_token(data={"sub": user.username, "id": user.id, "roles": roles,"status":user.status})
     return {"access_token": access_token, "token_type": "Bearer"}

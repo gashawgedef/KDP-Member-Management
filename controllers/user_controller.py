@@ -29,3 +29,7 @@ def update_item(id, request:schemas.UserModel, db: Session = Depends(get_db)):
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_item(id, db: Session = Depends(get_db)):
     return user_repository.delete_user(id, db)
+
+@router.get("/me", response_model=schemas.TokenData)
+async def read_current_user(current_user: schemas.TokenData = Depends(user_repository.get_current_user)):
+    return current_user
