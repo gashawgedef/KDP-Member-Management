@@ -34,6 +34,9 @@ def update_item(id, request:schemas.UserModel, db: Session = Depends(get_db)):
 def delete_item(id, db: Session = Depends(get_db)):
     return user_repository.delete_user(id, db)
 
+# @router.get("/me", response_model=schemas.TokenData)
+# async def read_current_user(current_user: schemas.TokenData = Depends(get_current_user)):
+#     return current_user
 @router.get("/me", response_model=schemas.TokenData)
 async def read_current_user(current_user: schemas.TokenData = Depends(get_current_user)):
     return current_user

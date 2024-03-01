@@ -22,13 +22,17 @@ def create_access_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def verify_token(data:str,credentials_exception):
+def verify_token(token: str, credentials_exception):
     try:
-        payload = jwt.decode(data, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
-        if username is None:
+        user_id: int = payload.get("id")
+        status: bool = payload.get("status")
+        if username is None or user_id is None or status is None:
             raise credentials_exception
-        token_data = schemas.TokenData(username=username)
+        token_data = schemas.TokenData(username=username, id=user_id, status=status)
     except JWTError:
         raise credentials_exception
+    return token_data
+
 
