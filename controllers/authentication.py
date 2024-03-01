@@ -25,6 +25,9 @@ def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(
         )
 
     # Assuming 'create_access_token' function works properly
-    access_token = token.create_access_token(data={"sub": user.username, "id": user.id, "status": user.status})
+    roles = [{"role_name": role.role_name} for role in user.assigned_roles]
+    
+    # Assuming 'create_access_token' function works properly
+    access_token = token.create_access_token(data={"sub": user.username, "id": user.id, "status": user.status, "roles": roles})
     
     return {"access_token": access_token, "token_type": "bearer", "user": user}

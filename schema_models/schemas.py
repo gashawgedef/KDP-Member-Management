@@ -89,6 +89,7 @@ class TokenData(BaseModel):
     username: str | None = None
     id: int | None = None
     status: bool | None = None
+    roles: List[dict] = []
 
 class MembershipPlanModel(BaseModel):
     name :str
