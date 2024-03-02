@@ -1,4 +1,6 @@
+import token
 from fastapi import APIRouter, Depends, status
+from fastapi.security import OAuth2
 from sqlalchemy.orm import Session
 
 from  database_connection import get_db
@@ -40,3 +42,9 @@ def delete_item(id, db: Session = Depends(get_db)):
 @router.get("/me", response_model=schemas.TokenData)
 async def read_current_user(current_user: schemas.TokenData = Depends(get_current_user)):
     return current_user
+@router.post("/logout")
+async def logout(token_data: schemas.TokenData = Depends(get_current_user)):
+    # Here you can implement the logout logic, such as invalidating the token or updating a user's session status.
+    # For simplicity, let's assume you just return a success message.
+    token.invalidate_token(token_data.token)
+    return {"message": "Logged out successfully"}
