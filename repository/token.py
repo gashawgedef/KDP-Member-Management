@@ -57,4 +57,6 @@ def verify_token(token: str, credentials_exception):
         raise credentials_exception
     return token_data
 
+# def check_active(token:str=Depends(oa)):
+
 
