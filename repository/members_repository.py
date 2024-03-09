@@ -35,6 +35,7 @@ def create_members(request: schemas.Members,db:Session):
     return new_member
 
 
+
 def get_all_members(db: Session, pagination_params: schemas.Pagination):
     # Apply pagination parameters to the query
     query = db.query(models.Member)
