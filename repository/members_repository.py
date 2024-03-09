@@ -1,4 +1,5 @@
 
+from itertools import count
 from fastapi import HTTPException, Response,status
 from sqlalchemy.orm import Session
 from schema_models import schemas
@@ -33,9 +34,29 @@ def create_members(request: schemas.Members,db:Session):
     db.refresh(new_member)
     return new_member
 
-def get_all_members(db:Session):
-    members=db.query(models.Member).all()
-    return members
+
+def get_all_members(db: Session, pagination_params: schemas.Pagination):
+    # Apply pagination parameters to the query
+    query = db.query(models.Member)
+    if pagination_params.order == schemas.SortEnum.ASC:
+        query = query.order_by(models.Member.id.asc())
+    else:
+        query = query.order_by(models.Member.id.desc())
+    query = query.offset((pagination_params.page - 1) * pagination_params.perPage)
+    query = query.limit(pagination_params.perPage)
+    
+    # Fetch the data
+    data = query.all()
+
+    # Count the total number of results without pagination
+    total_results = db.query(models.Member).count()
+
+    return {"total_results": total_results, "data": data}
+
+
+
+
+
 
 def get_member_by_id(id:int,db:Session):
     member_data=db.query(models.Member).filter(models.Member.id==id)

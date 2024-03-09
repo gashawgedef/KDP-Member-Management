@@ -55,12 +55,3 @@ def check_admin(token_str: str = Depends(oauth2_scheme)):
         )
     return payload
 
-# def check_admin(payload:str = Depends(check_active)):
-#     roles = payload.roles
-#     is_admin = any(role.role_name == 'Admin' for role in roles)
-#     if not is_admin:
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED,
-#             detail="This route only accesses Admin"
-#         )
-#     return payload

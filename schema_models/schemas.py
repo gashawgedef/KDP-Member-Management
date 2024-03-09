@@ -1,8 +1,11 @@
 
 
 from datetime import date
+from enum import Enum
 from typing import List, Optional
+from fastapi import Query
 from pydantic import BaseModel
+from sqlalchemy import false
 
 class Members(BaseModel):
     first_name: str
@@ -126,3 +129,19 @@ class RecieptIssuerModel(RecieptIssuerCreateModel):
 
     class Config:
         orm_mode = True
+
+class SortEnum(Enum):
+    ASC="asc"
+    DESC="desc"
+
+class Pagination(BaseModel):
+    perPage:int
+    page:int
+    order:SortEnum
+
+def pagination_params(
+        page: int = Query(ge=1, required=False, default=1, le=500000),
+        perPage: int = Query(ge=1, le=100, required=False, default=10),
+        order: SortEnum = SortEnum.DESC
+) -> Pagination:
+    return Pagination(perPage=perPage, page=page, order=order)
