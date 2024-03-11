@@ -135,9 +135,8 @@ class SortEnum(Enum):
     DESC="desc"
 
 class Pagination(BaseModel):
-    perPage:int
-    page:int
-    order:SortEnum
+      page: int
+      perPage: int
 
 def pagination_params(
         page: int = Query(ge=1, required=False, default=1, le=500000),

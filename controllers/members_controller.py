@@ -17,10 +17,12 @@ def create(request:schemas.Members, db: Session = Depends(get_db)):
 def get_members(
     first_name: str = Query(None, description="Filter by first name"),
     status: str = Query(None, description="Filter by status"),
-    pagination: schemas.Pagination = Depends(schemas.pagination_params),
+    page: int = Query(1, ge=1, description="Page number"),
+    per_page: int = Query(20, ge=1, description="Items per page"),
     db: Session = Depends(get_db)
 ):
-    return members_repository.get_all_members(db, pagination, first_name=first_name, status=status)
+    pagination_params = schemas.Pagination(page=page, perPage=per_page)
+    return members_repository.get_all_members(db, pagination_params, first_name=first_name, status=status)
 
 
 @router.get("/{id}", status_code=200)
