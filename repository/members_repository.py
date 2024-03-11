@@ -36,9 +36,21 @@ def create_members(request: schemas.Members,db:Session):
 
 
 
-def get_all_members(db: Session, pagination_params: schemas.Pagination):
+def get_all_members(db: Session, pagination_params: schemas.Pagination, first_name: str = None, status: str = None):
     # Apply pagination parameters to the query
     query = db.query(models.Member)
+
+    # Filter by first_name if provided
+    if first_name:
+        query = query.filter(models.Member.first_name == first_name)
+
+    # Filter by status if provided
+    if status:
+        query = query.filter(models.Member.member_status == status)
+    
+    # Count the total number of results without pagination
+    total_results = query.count()
+
     if pagination_params.order == schemas.SortEnum.ASC:
         query = query.order_by(models.Member.id.asc())
     else:
@@ -49,10 +61,10 @@ def get_all_members(db: Session, pagination_params: schemas.Pagination):
     # Fetch the data
     data = query.all()
 
-    # Count the total number of results without pagination
-    total_results = db.query(models.Member).count()
+
 
     return {"total_results": total_results, "data": data}
+
 
 
 

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from  database_connection import get_db
@@ -14,9 +14,13 @@ def create(request:schemas.Members, db: Session = Depends(get_db)):
 
 #,current_user:schemas.UserModel=Depends(oauth2.get_current_user)
 @router.get('/')
-def get_members(pagination: schemas.Pagination = Depends(schemas.pagination_params),
-                db: Session = Depends(get_db)):
-    return members_repository.get_all_members(db, pagination)
+def get_members(
+    first_name: str = Query(None, description="Filter by first name"),
+    status: str = Query(None, description="Filter by status"),
+    pagination: schemas.Pagination = Depends(schemas.pagination_params),
+    db: Session = Depends(get_db)
+):
+    return members_repository.get_all_members(db, pagination, first_name=first_name, status=status)
 
 
 @router.get("/{id}", status_code=200)
