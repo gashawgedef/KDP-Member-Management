@@ -44,7 +44,6 @@ def get_all_members(db: Session, pagination_params: schemas.Pagination, first_na
 
     if status:
         query = query.filter(models.Member.member_status == status)
-    
     total_results = query.count()
 
     query = query.offset((pagination_params.page - 1) * pagination_params.perPage)
