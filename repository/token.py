@@ -41,8 +41,6 @@ def verify_token(token: str, credentials_exception):
         user_id: int = payload.get("id")
         status: bool = payload.get("status")
         roles: List[schemas.RoleModel] = payload.get("roles", [])
-       
-
         if None in (username, user_id, status):
             raise credentials_exception
         

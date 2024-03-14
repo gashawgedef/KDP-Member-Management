@@ -21,6 +21,8 @@ def create_users(request: schemas.UserModel, db: Session):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+
 def get_all_users(db:Session):
     users = db.query(models.User).all()
     user_models = []
