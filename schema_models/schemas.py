@@ -100,18 +100,36 @@ class MembershipPlanModel(BaseModel):
     duration :str
 
 
-class RecieptItemsModel(BaseModel):
-    receipt_issuer_id: int
-    identifier: str
-    from_number: str
-    to_number: str
-    date_taken: date
-    return_date: Optional[date] = None
-    amount_birr: float
-    class Config:
-        orm_mode = True
+# class RecieptItemsModel(BaseModel):
+#     receipt_issuer_id: int
+#     identifier: str
+#     from_number: str
+#     to_number: str
+#     date_taken: date
+#     return_date: Optional[date] = None
+#     amount_birr: float
+#     class Config:
+#         orm_mode = True
 
-class RecieptIssuerCreateModel(BaseModel):
+# class RecieptIssuerCreateModel(BaseModel):
+#     first_name: str
+#     middle_name: str
+#     last_name: str
+#     gender: str
+#     phone: str
+#     place_region: str
+#     place_zone: str
+#     place_wereda: str
+#     place_kebele: str
+
+
+# class RecieptIssuerModel(RecieptIssuerCreateModel):
+#     id: int
+#     receipt_items: List[RecieptItemsModel] = []
+
+#     class Config:
+#         orm_mode = True
+class RecieptIssuerBase(BaseModel):
     first_name: str
     middle_name: str
     last_name: str
@@ -122,14 +140,27 @@ class RecieptIssuerCreateModel(BaseModel):
     place_wereda: str
     place_kebele: str
 
+class RecieptIssuerCreateModel(RecieptIssuerBase):
+    pass
 
-class RecieptIssuerModel(RecieptIssuerCreateModel):
+class RecieptIssuerModel(RecieptIssuerBase):
     id: int
-    receipt_items: List[RecieptItemsModel] = []
 
     class Config:
         orm_mode = True
 
+class RecieptItemsModel(BaseModel):
+    identifier: str
+    receipt_issuer_id: int
+    from_number: str
+    to_number: str
+    date_taken: date
+    return_date: Optional[date] = None
+    amount_birr: float
+    receipt_issuer: Optional[dict] = None  # To hold the information about the ReceiptIssuer
+
+    class Config:
+        orm_mode = True
 class SortEnum(Enum):
     ASC="asc"
     DESC="desc"

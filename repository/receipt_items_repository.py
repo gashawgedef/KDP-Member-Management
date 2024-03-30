@@ -21,10 +21,21 @@ def create_reciept_items(request: schemas.RecieptItemsModel,db:Session):
     return new_reciept_items
 
 def get_all_reciept_items(db:Session):
-    reciept_items=db.query(models.RecieptItems).all()
-    return reciept_items
+    receipt_items = db.query(models.RecieptItems).all()
 
+    for item in receipt_items:
+        # Fetch the corresponding receipt issuer data from the database based on receipt_issuer_id
+        receipt_issuer_data = db.query(models.RecieptIssuer).filter(models.RecieptIssuer.id == item.receipt_issuer_id).first()
 
+        print("Processing receipt item with ID:", item.id)
+        
+        # If receipt issuer data is found, attach it to the receipt item
+        if receipt_issuer_data:
+           item.receipt_issuer = receipt_issuer_data
+        else:
+            print("No receipt issuer data found for receipt item with ID:", item.id)
+
+    return receipt_items
 
 def get_single_reciept_item(id:int, db:Session):
     reciept_items = db.query(models.RecieptItems).filter(models.RecieptItems.id == id).first()
