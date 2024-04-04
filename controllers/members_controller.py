@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Query, status
+from typing import Optional
+from fastapi import APIRouter, Depends, Query, Response, status
 from sqlalchemy.orm import Session
 
 from  database_connection import get_db
@@ -24,7 +25,16 @@ def get_members(
     pagination_params = schemas.Pagination(page=page, perPage=per_page)
     return members_repository.get_all_members(db, pagination_params, first_name=first_name, status=status)
 
+@router.get("/export/members/excel")
+async def export_members_excel(
+    response: Response,
+    db: Session = Depends(get_db),
+    first_name: Optional[str] = Query(None, description="Filter by first name"),
+    status: Optional[str] = Query(None, description="Filter by status"),
+):
+    return await members_repository.export_members_excel(db, first_name=first_name, status=status)
 
+    
 @router.get("/{id}", status_code=200)
 def show(id, db: Session = Depends(get_db)):
     return members_repository.get_single_member(id, db)

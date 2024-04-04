@@ -1,6 +1,10 @@
 
 from itertools import count
-from fastapi import HTTPException, Response,status
+import pandas as pd
+import io
+from typing import Optional
+from fastapi import HTTPException, Query, Response,status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from schema_models import schemas
 from database_model import models
@@ -54,10 +58,40 @@ def get_all_members(db: Session, pagination_params: schemas.Pagination, first_na
     return {"count": total_results, "data": data}
 
 
+async def export_members_excel(
+    db: Session,
+    first_name: Optional[str] = None,
+    status: Optional[str] = None,
+):
+    query = db.query(models.Member).order_by(models.Member.first_name)
 
+    if first_name:
+        query = query.filter(models.Member.first_name == first_name)
 
+    if status:
+        query = query.filter(models.Member.member_status == status)
 
+    members = query.all()
 
+    # Convert members data to DataFrame
+    member_dicts = [member.__dict__ for member in members]
+    df = pd.DataFrame(member_dicts)
+
+    # Prepare Excel file
+    output = io.BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Members')
+    writer.close()  # Close the writer to finalize the Excel file
+
+    # Get the Excel file content
+    excel_data = output.getvalue()
+
+    # Return Excel as downloadable file
+    return StreamingResponse(
+        io.BytesIO(excel_data),
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": "attachment; filename=members.xlsx"}
+    )
 
 def get_member_by_id(id:int,db:Session):
     member_data=db.query(models.Member).filter(models.Member.id==id)
