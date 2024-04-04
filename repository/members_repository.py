@@ -58,6 +58,41 @@ def get_all_members(db: Session, pagination_params: schemas.Pagination, first_na
     return {"count": total_results, "data": data}
 
 
+# async def export_members_excel(
+#     db: Session,
+#     first_name: Optional[str] = None,
+#     status: Optional[str] = None,
+# ):
+#     query = db.query(models.Member).order_by(models.Member.first_name)
+
+#     if first_name:
+#         query = query.filter(models.Member.first_name == first_name)
+
+#     if status:
+#         query = query.filter(models.Member.member_status == status)
+
+#     members = query.all()
+
+#     # Convert members data to DataFrame
+#     member_dicts = [member.__dict__ for member in members]
+#     df = pd.DataFrame(member_dicts)
+
+#     # Prepare Excel file
+#     output = io.BytesIO()
+#     writer = pd.ExcelWriter(output, engine='xlsxwriter')
+#     df.to_excel(writer, index=False, sheet_name='Members')
+#     writer.close()  # Close the writer to finalize the Excel file
+
+#     # Get the Excel file content
+#     excel_data = output.getvalue()
+
+#     # Return Excel as downloadable file
+#     return StreamingResponse(
+#         io.BytesIO(excel_data),
+#         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+#         headers={"Content-Disposition": "attachment; filename=members.xlsx"}
+#     )
+
 async def export_members_excel(
     db: Session,
     first_name: Optional[str] = None,
@@ -72,10 +107,62 @@ async def export_members_excel(
         query = query.filter(models.Member.member_status == status)
 
     members = query.all()
+    column_order = [
+        'first_name',
+        'middle_name',
+        'last_name',
+        'gender',
+        'phone',
+        'email',
+        'birth_date',
+        'birth_place_region',
+        'birth_place_zone',
+        'birth_place_wereda',
+        'birth_place_kebele',
+        'work_place',
+        'country',
+        'address_region',
+        'address_zone',
+        'address_wereda',
+        'payment_status',
+        'member_status',
+        'membership_year',
+        'is_staff'
+    ]
 
     # Convert members data to DataFrame
     member_dicts = [member.__dict__ for member in members]
-    df = pd.DataFrame(member_dicts)
+    df = pd.DataFrame(member_dicts, columns=column_order)
+
+    # Define headers for the data
+    headers = {
+        'first_name': 'ስም',
+        'middle_name': 'የአባት ስም',
+        'last_name': 'የአያት ስም',
+        'gender': 'ጾታ',
+        'phone': 'ስልክ',
+        'email': 'ኢ-ሜይል',
+        'birth_date': 'የትውልድ ቀን',
+        "birth_place_region":"የትውልድ ክልል",
+        "birth_place_zone": "የትውልድ ዞን",
+        "birth_place_wereda":"የትውልድ ወረዳ",
+        "birth_place_kebele":"የትውልድ ቀበሌ",
+       "work_place": "መስሪያ ቤት",
+       "country": "ሃገር",
+       "address_region": "የስራ ክልል",
+        "address_zone": "የስራ ዞን",
+        "address_wereda": "የስራ ወረዳ",
+        "payment_status": "የክፍያ ሁኔታ"  ,
+        "member_status": "የአባልነት ሁኔታ",
+        "membership_year": "የአባልነት ዘመን",
+        "is_staff": "የቅልማ ስታፍ?",
+        # Add more headers for other columns as needed
+    }
+    
+
+    # Rename DataFrame columns using the headers
+  
+    df = df.rename(columns=headers)
 
     # Prepare Excel file
     output = io.BytesIO()
@@ -92,6 +179,7 @@ async def export_members_excel(
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={"Content-Disposition": "attachment; filename=members.xlsx"}
     )
+
 
 def get_member_by_id(id:int,db:Session):
     member_data=db.query(models.Member).filter(models.Member.id==id)
