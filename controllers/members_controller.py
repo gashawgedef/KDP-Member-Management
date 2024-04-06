@@ -1,5 +1,5 @@
-from typing import Optional
-from fastapi import APIRouter, Depends, Query, Response, status
+from typing import Annotated, Optional
+from fastapi import APIRouter, BackgroundTasks, Depends, Query, Response, status
 from sqlalchemy.orm import Session
 
 from  database_connection import get_db
@@ -10,8 +10,8 @@ from repository import members_repository,oauth2
 router = APIRouter(prefix="/members", tags=["members"])
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create(request:schemas.Members, db: Session = Depends(get_db)):
-    return members_repository.create_members(request, db)
+def create(request: schemas.Members, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    return members_repository.create_members(request, db, background_tasks)
 
 #,current_user:schemas.UserModel=Depends(oauth2.get_current_user)
 @router.get('/')
@@ -46,3 +46,11 @@ def update_item(id, request:schemas.Members, db: Session = Depends(get_db),curre
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_item(id, db: Session = Depends(get_db),current_user:schemas.UserModel=Depends(oauth2.get_current_user)):
     return members_repository.delete_member(id, db)
+
+@router.post("/send-notification/{email}")
+async def send_notification(
+    email: str, background_tasks: BackgroundTasks, q: Annotated[str, Depends(members_repository.get_query)]
+):
+    message = f"message to {email}\n"
+    background_tasks.add_task(members_repository.write_log, message)
+    return {"message": "Message sent"}

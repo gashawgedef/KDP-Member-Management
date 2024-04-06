@@ -1,17 +1,52 @@
 
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from enum import member
 from itertools import count
 import pandas as pd
 import io
+import os
+import smtplib
+
 from typing import Optional
-from fastapi import HTTPException, Query, Response,status
+from fastapi import BackgroundTasks, HTTPException, Query, Response,status
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from schema_models import schemas
 from database_model import models
 
 
-def create_members(request: schemas.Members,db:Session):
-    new_member=models.Member(
+# def create_members(request: schemas.Members,db:Session):
+#     new_member=models.Member(
+#         first_name=request.first_name,
+#         middle_name=request.middle_name,
+#         last_name=request.last_name,
+#         gender=request.gender,
+#         phone=request.phone,
+#         email=request.email,
+#         birth_date=request.birth_date,
+#         birth_place_region=request.birth_place_region,
+#         birth_place_zone=request.birth_place_zone,
+#         birth_place_wereda=request.birth_place_wereda,
+#         birth_place_kebele=request.birth_place_kebele,
+#         work_place=request.work_place,
+#         country=request.country,
+#         address_region=request.address_region,
+#         address_zone=request.address_zone,
+#         address_wereda=request.address_wereda,
+#         payment_status=request.payment_status,
+#         member_status=request.member_status,
+#         membership_year=request.membership_year,
+#         is_staff=request.is_staff
+#         )
+#     db.add(new_member)
+#     db.commit()
+#     db.refresh(new_member)
+#     return new_member
+
+def create_members(request: schemas.Members, db: Session, background_tasks: BackgroundTasks):
+    # Create the member in the database
+    new_member = models.Member(
         first_name=request.first_name,
         middle_name=request.middle_name,
         last_name=request.last_name,
@@ -32,13 +67,17 @@ def create_members(request: schemas.Members,db:Session):
         member_status=request.member_status,
         membership_year=request.membership_year,
         is_staff=request.is_staff
-        )
+    )
     db.add(new_member)
     db.commit()
     db.refresh(new_member)
+    
+    # Send email notification
+    email_subject = "New Member Created"
+    email_message = f"Dear {new_member.first_name} {new_member.middle_name} {new_member.last_name} you have been registered with email {new_member.email}. Thank you for being our member"
+    background_tasks.add_task(write_log, email_subject, new_member.email, email_message)
+    
     return new_member
-
-
 
 def get_all_members(db: Session, pagination_params: schemas.Pagination, first_name: str = None, status: str = None):
     query = db.query(models.Member).order_by(models.Member.first_name)
@@ -225,6 +264,47 @@ def delete_member(id, db:Session):
     blog.delete(synchronize_session=False)
     db.commit()
     return blog
+
+
+def send_email(email_subject: str, email_address: str, email_message: str):
+    sender_email = "gashawgedef@gmail.com"
+    receiver_email = email_address
+    password = "ema12@29"
+    
+    message = MIMEMultipart()
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = email_subject
+
+    # Add message body
+    message.attach(MIMEText(email_message, "plain"))
+
+    # Connect to SMTP server and send email
+    with smtplib.SMTP("smtp.example.com", 587) as server:
+        server.starttls()
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message.as_string())
+
+def write_log(email_subject: str, email_address: str, email_message: str):
+    log_file_path = "C:/Users/ggashaw/Documents/log.txt"
+    # Specify absolute path here
+    with open(log_file_path, mode="a") as log:
+        log.write(f"Email sent to: {email_address}\n")
+        log.write(f"Subject: {email_subject}\n")
+        log.write(f"Message: {email_message}\n")
+        log.write("\n")  # Add a separator between log entries
+    
+    # Send email
+    send_email(email_subject, email_address, email_message)
+
+
+
+def get_query(background_tasks: BackgroundTasks, q: str | None = None):
+    if q:
+        message = f"Sent Message: {q}\n"
+        background_tasks.add_task(write_log, message)
+    return q
+
 
 
 def  get_these():
