@@ -1,6 +1,7 @@
 
-from email.mime.multipart import MIMEMultipart
+import smtplib
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from enum import member
 from itertools import count
 import pandas as pd
@@ -269,7 +270,7 @@ def delete_member(id, db:Session):
 def send_email(email_subject: str, email_address: str, email_message: str):
     sender_email = "gashawgedef@gmail.com"
     receiver_email = email_address
-    password = "ema12@29"
+    password = "enzakuna12@29"
     
     message = MIMEMultipart()
     message["From"] = sender_email
@@ -280,11 +281,14 @@ def send_email(email_subject: str, email_address: str, email_message: str):
     message.attach(MIMEText(email_message, "plain"))
 
     # Connect to SMTP server and send email
-    with smtplib.SMTP("smtp.example.com", 587) as server:
+    with smtplib.SMTP("gashawgedef@gmail.com", 587) as server:
         server.starttls()
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, message.as_string())
 
+# def write_log(email_subject: str, email_address: str, email_message: str):
+#     # Send email
+#     send_email(email_subject, email_address, email_message)
 def write_log(email_subject: str, email_address: str, email_message: str):
     log_file_path = "C:/Users/ggashaw/Documents/log.txt"
     # Specify absolute path here
