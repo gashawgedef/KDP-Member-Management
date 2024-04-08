@@ -74,8 +74,8 @@ def create_members(request: schemas.Members, db: Session, background_tasks: Back
     db.refresh(new_member)
     
     # Send email notification
-    email_subject = "New Member Created"
-    email_message = f"Dear {new_member.first_name} {new_member.middle_name} {new_member.last_name} you have been registered with email {new_member.email}. Thank you for being our member"
+    email_subject = "Congratulations!."
+    email_message = f"Dear {new_member.first_name} {new_member.middle_name} {new_member.last_name} you have been registered  as staff member with email {new_member.email}. Thank you for being Abay Bank Staff Member"
     background_tasks.add_task(write_log, email_subject, new_member.email, email_message)
     
     return new_member
@@ -270,8 +270,8 @@ def delete_member(id, db:Session):
 def send_email(email_subject: str, email_address: str, email_message: str):
     sender_email = "gashawgedef@gmail.com"
     receiver_email = email_address
-    password = "enzakuna12@29"
-    
+    password = "wcnu cxam cobj qvcu"
+
     message = MIMEMultipart()
     message["From"] = sender_email
     message["To"] = receiver_email
@@ -280,11 +280,27 @@ def send_email(email_subject: str, email_address: str, email_message: str):
     # Add message body
     message.attach(MIMEText(email_message, "plain"))
 
-    # Connect to SMTP server and send email
-    with smtplib.SMTP("gashawgedef@gmail.com", 587) as server:
-        server.starttls()
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, message.as_string())
+    try:
+        # Connect to SMTP server (Gmail) and send email
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(sender_email, password)
+            server.sendmail(sender_email, receiver_email, message.as_string())
+            print("Email sent successfully!")
+    except Exception as e:
+        print(f"Failed to send email. Error: {str(e)}")
+
+def write_log(email_subject: str, email_address: str, email_message: str):
+    log_file_path = "C:/Users/ggashaw/Documents/log.txt"
+
+    with open(log_file_path, mode="a") as log:
+        log.write(f"Email sent to: {email_address}\n")
+        log.write(f"Subject: {email_subject}\n")
+        log.write(f"Message: {email_message}\n")
+        log.write("\n")  # Add a separator between log entries
+
+    # Send email
+    send_email(email_subject, email_address, email_message)
 
 # def write_log(email_subject: str, email_address: str, email_message: str):
 #     # Send email
