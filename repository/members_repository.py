@@ -83,11 +83,12 @@ def create_members(request: schemas.Members, db: Session, background_tasks: Back
 def get_all_members(db: Session, pagination_params: schemas.Pagination, first_name: str = None, status: str = None):
     query = db.query(models.Member).order_by(models.Member.first_name)
 
-    if first_name:
-        query = query.filter(models.Member.first_name == first_name)
+    if first_name is not None:
+        query = query.filter(models.Member.first_name.ilike(f"%{first_name}%"))
 
-    if status:
+    if status is not None:
         query = query.filter(models.Member.member_status == status)
+
     total_results = query.count()
 
     query = query.offset((pagination_params.page - 1) * pagination_params.perPage)
@@ -96,6 +97,7 @@ def get_all_members(db: Session, pagination_params: schemas.Pagination, first_na
     data = query.all()
 
     return {"count": total_results, "data": data}
+
 
 
 # async def export_members_excel(
