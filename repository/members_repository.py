@@ -1,4 +1,6 @@
 
+import time
+from typing import List
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -16,6 +18,19 @@ from sqlalchemy.orm import Session
 from schema_models import schemas
 from database_model import models
 
+SENT_EMAILS_FILE = "C:/Users/ggashaw/Documents/sent_emails.txt"
+def load_sent_emails() -> set:
+    sent_emails = set()
+    if os.path.exists(SENT_EMAILS_FILE):
+        with open(SENT_EMAILS_FILE, "r") as f:
+            for line in f:
+                sent_emails.add(line.strip())
+    return sent_emails
+
+def save_sent_emails(sent_emails: set):
+    with open(SENT_EMAILS_FILE, "w") as f:
+        for email in sent_emails:
+            f.write(email + "\n")
 
 # def create_members(request: schemas.Members,db:Session):
 #     new_member=models.Member(
@@ -267,12 +282,128 @@ def delete_member(id, db:Session):
     blog.delete(synchronize_session=False)
     db.commit()
     return blog
+    
+# def get_all_emails(db: Session) -> List[str]:
+# def get_all_emails() -> List[str]:
+#     # all_members = db.query(models.Member).all()
+#     all_members=["gashawgedef@gmail.com","getachewdereje6@gmail.com","melkamu372@gmail.com","getachewgedef12@gmail.com"]
+    
+#     if not all_members:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail="No member info in the list",
+#         )
+    
+#     all_emails = list(set(member for member in all_members))
+#     return all_emails
+def get_all_emails() -> List[str]:
+    all_members = ["gashawgedef@gmail.com", "getachewdereje6@gmail.com", "getachewgedef12@gmail.com"]
+    
+    if not all_members:
+        raise ValueError("No member info in the list")
+    
+    all_emails = list(set(all_members))  # Remove duplicates if any
+    return all_emails
+
+# def send_email_multiple(db: Session, email_subject: str, email_message: str):
+#     all_emails = get_all_emails(db)
+    
+#     for email in all_emails:
+#         if send_email(email_subject, email, email_message):
+#             write_log(email_subject, email, email_message)
+#         else:
+#             print(f"Failed to send email to {email}")
+# def send_email_multiple( email_subject: str, email_message: str, retries: int = 3, delay: float = 2.0):
+#     all_emails = get_all_emails()
+    
+#     for email in all_emails:
+#         success = False
+#         for attempt in range(retries):
+#             if send_email(email_subject, email, email_message):
+#                 write_log(email_subject, email, email_message)
+#                 success = True
+#                 print(f"Email sent successfully to {email} on attempt {attempt + 1}")
+#                 break
+#             else:
+#                 print(f"Failed to send email to {email} on attempt {attempt + 1}")
+#                 time.sleep(delay)  # Wait before retrying
+#         if not success:
+#             print(f"Failed to send email to {email} after {retries} attempts")
+# def send_email_multiple(email_subject: str, email_message: str, retries: int = 3, delay: float = 2.0):
+#     all_emails = get_all_emails()
+
+#     for email in all_emails:
+#         success = False
+#         for attempt in range(retries):
+#             if send_email(email_subject, email, email_message):
+#                 write_log(email_subject, email, email_message)
+#                 success = True
+#                 print(f"Email sent successfully to {email} on attempt {attempt + 1}")
+#                 break
+#             else:
+#                 print(f"Failed to send email to {email} on attempt {attempt + 1}")
+#                 time.sleep(delay)  # Wait before retrying
+#         if not success:
+#             print(f"Failed to send email to {email} after {retries} attempts")
+# def send_email_multiple(email_subject: str, email_message: str, retries: int = 3, delay: float = 2.0):
+#     all_emails = get_all_emails()
+#     sent_emails = set()
+
+#     for email in all_emails:
+#         if email in sent_emails:
+#             print(f"Email already sent to {email}, skipping...")
+#             continue
+        
+#         success = False
+#         for attempt in range(retries):
+#             if send_email(email_subject, email, email_message):
+#                 write_log(email_subject, email, email_message)
+#                 sent_emails.add(email)  # Mark this email as sent
+#                 success = True
+#                 print(f"Email sent successfully to {email} on attempt {attempt + 1}")
+#                 break
+#             else:
+#                 print(f"Failed to send email to {email} on attempt {attempt + 1}")
+#                 time.sleep(delay)  # Wait before retrying
+        
+#         if not success:
+#             print(f"Failed to send email to {email} after {retries} attempts")
 
 
+def send_email_multiple(email_subject: str, email_message: str):
+    all_emails = get_all_emails()
+    sent_emails = load_sent_emails()
+
+    for email in all_emails:
+        if email in sent_emails:
+            print(f"Email already sent to {email}, skipping...")
+            continue
+        
+        if send_email(email_subject, email, email_message):
+            write_log(email_subject, email, email_message)
+            sent_emails.add(email)  # Mark this email as sent
+            save_sent_emails(sent_emails)
+            print(f"Email sent successfully to {email}")
+        else:
+            print(f"Failed to send email to {email}")
+    print("Email sent completed")
+# def load_sent_emails() -> set:
+#     sent_emails = set()
+#     if os.path.exists(SENT_EMAILS_FILE):
+#         with open(SENT_EMAILS_FILE, "r") as f:
+#             for line in f:
+#                 sent_emails.add(line.strip())
+#     return sent_emails
+
+# def save_sent_emails(sent_emails: set):
+#     with open(SENT_EMAILS_FILE, "w") as f:
+#         for email in sent_emails:
+#             f.write(email + "\n")            
 def send_email(email_subject: str, email_address: str, email_message: str):
     sender_email = "gashawgedef@gmail.com"
     receiver_email = email_address
-    password = "wcnu cxam cobj qvcu"
+    password = "ugec npjo wmex oagi"
+    # password = "enzakuna12@29"
 
     message = MIMEMultipart()
     message["From"] = sender_email

@@ -24,7 +24,16 @@ def get_members(
 ):
     pagination_params = schemas.Pagination(page=page, perPage=per_page)
     return members_repository.get_all_members(db, pagination_params, first_name=first_name, status=status)
-
+# @router.post("/send-emails/")
+# def send_emails(background_tasks: BackgroundTasks, email_subject: str, email_message: str, db: Session = Depends(get_db)):
+#     background_tasks.add_task(members_repository.send_email_multiple, db, email_subject, email_message,retries=3)
+    
+#     return {"message": "Emails are being sent in the background."}
+@router.post("/send-emails/")
+async def send_emails(background_tasks: BackgroundTasks, email_subject: str, email_message: str):
+    background_tasks.add_task(members_repository.send_email_multiple, email_subject, email_message)
+    
+    return {"message": "Emails are being sent in the background."}
 @router.get("/export/members/excel")
 async def export_members_excel(
     response: Response,
