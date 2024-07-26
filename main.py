@@ -5,7 +5,6 @@ from schema_models import schemas
 from database_model import models
 from controllers import members_controller,receipt_items_controller,reciepts_issuer_controller,membershi_plan_controller,profession_types_controller,role_controller,members_addresses_controller,donation_types_controller,announcements_controller,projects_controller,user_controller,authentication
 from database_connection import engine,Base
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 
